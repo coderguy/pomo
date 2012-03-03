@@ -11,6 +11,11 @@ module Pomo
     ##
     # Task name.
     
+    attr_accessor :id
+    
+    ##
+    # Task name.
+    
     attr_accessor :name
     
     ##
@@ -29,13 +34,21 @@ module Pomo
     attr_accessor :complete
     
     ##
+    # Task completion time.
+    
+    attr_accessor :completed_at
+    
+    ##
     # Initialize with _name_ and _options_.
     
     def initialize name = nil, options = {}
+      @id = self.object_id
       @name = name or raise '<task> required'
       @description = options.delete :description
+      @tags = options.delete :tags
       @length = options.fetch :length, 25
       @complete = false
+      @completed_at = false
     end
     
     ##
@@ -50,6 +63,14 @@ module Pomo
     
     def complete?
       complete
+    end
+
+    ##
+    # Mark a task as completed.
+    
+    def mark_complete
+      @complete = true
+      @completed_at = Time.now
     end
     
     ##
@@ -67,7 +88,7 @@ module Pomo
         sleep 60
         { :remaining => remaining }
       end
-      @complete = true
+      mark_complete
       notify_warning complete_message
     end
     

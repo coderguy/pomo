@@ -97,6 +97,7 @@ command :add do |c|
   c.example 'Add a task with 60 minute limit', 'pomo add "create executable" --length 60'
   c.option '-d', '--description string', 'Add verbose task description'
   c.option '-l', '--length minutes', Integer, 'Change the default length in minutes'
+  c.option '-t', '--tags string', 'Add tags to the task'
   c.action do |args, options|
     task = Pomo::Task.new(args.shift, options.__hash__)
     list << task
@@ -196,7 +197,7 @@ command :complete do |c|
   c.example 'Mark fifth task as complete', 'pomo complete 5'
   c.action do |args, options|
     list.find(*args) do |task, i|
-      task.complete = true
+      task.mark_complete
       say "  - Completed #{task}"
     end
     list.save
